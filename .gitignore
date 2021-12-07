@@ -1,0 +1,5 @@
+*.gitattributes
+*.iml
+/.idea 
+/src/.idea
+/out/production/WaterCompiler/.idea
