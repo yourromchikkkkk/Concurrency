@@ -1,8 +1,11 @@
 package com.cursor.h2o;
+import java.util.concurrent.CyclicBarrier;
+
 import static com.cursor.h2o.Water.BARRIER;
 
 public class Hydrogen implements Runnable{
     final private char element = 'H';
+    private CyclicBarrier barrier = BARRIER;
 
     private void releaseHydrogen() {
         System.out.print(element);
@@ -10,12 +13,17 @@ public class Hydrogen implements Runnable{
 
     @Override
     public void run() {
-        try {
-            BARRIER.countDown();
-            BARRIER.await();
-            releaseHydrogen();
-        } catch (Exception e) {
-            System.out.println(e.toString());
+        for (int i = 0; i < 100; i++) {
+            try{
+                releaseHydrogen();
+                barrier.await();
+                Thread.sleep(3000);
+                if (barrier.await() == 0) {
+                    System.out.println();
+                }
+            } catch (Exception e) {
+                System.out.println(e.getCause().toString());
+            }
         }
     }
 }

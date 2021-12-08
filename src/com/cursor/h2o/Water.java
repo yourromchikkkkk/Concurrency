@@ -1,22 +1,12 @@
 package com.cursor.h2o;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 
 public class Water {
-    static final CountDownLatch BARRIER = new CountDownLatch(3); // parameter count = 3 (2 for hydrogens and 1 for oxygen)
+    static final CyclicBarrier BARRIER = new CyclicBarrier(3); // parameter parties = 3 (2 for hydrogens and 1 for oxygen)
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 0; i < 100; i ++) {
-            Thread thread1 = new Thread(new Hydrogen());
-            Thread thread2 = new Thread(new Hydrogen());
-            Oxygen oxygenThread = new Oxygen();
-            thread1.start();
-            Thread.sleep(100);
-            thread2.start();
-            Thread.sleep(100);
-            oxygenThread.start();
-            Thread.sleep(100);
-            System.out.println(" ");
-
-        }
+        new Thread(new Hydrogen()).start();
+        new Thread(new Hydrogen()).start();
+        new Oxygen().start();
 //        Hydrogen hydrogenThread1 = new Hydrogen();
 //        Hydrogen hydrogenThread2 = new Hydrogen();
 //        Oxygen oxygenThread = new Oxygen();
