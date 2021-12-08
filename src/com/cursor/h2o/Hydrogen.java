@@ -15,9 +15,9 @@ public class Hydrogen implements Runnable{
     public void run() {
         for (int i = 0; i < 100; i++) {
             try{
-                releaseHydrogen();
                 barrier.await();
-                Thread.sleep(3000);
+                releaseHydrogen();
+                Thread.sleep(100);
                 if (barrier.await() == 0) {
                     System.out.println();
                 }

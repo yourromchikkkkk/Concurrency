@@ -16,9 +16,9 @@ public class Oxygen extends Thread{
     public void run() {
         for (int i = 0; i < 100; i++) {
             try{
-                releaseOxygen();
                 barrier.await();
-                Thread.sleep(3000);
+                releaseOxygen();
+                Thread.sleep(100);
                 if (barrier.await() == 0) {
                     System.out.println();
                 }
