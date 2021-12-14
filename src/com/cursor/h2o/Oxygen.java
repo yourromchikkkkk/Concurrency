@@ -2,29 +2,25 @@ package com.cursor.h2o;
 
 import java.util.concurrent.CyclicBarrier;
 
-import static com.cursor.h2o.Water.BARRIER;
 
 public class Oxygen extends Thread{
-    final private char element = 'O';
-    private CyclicBarrier barrier = BARRIER;
+    private CyclicBarrier barrier = Water.barrier;
 
     private void releaseOxygen() {
-        System.out.print(element);
+        System.out.print('O');
     }
 
     @Override
     public void run() {
-        for (int i = 0; i < 100; i++) {
-            try{
-                barrier.await();
-                releaseOxygen();
-                Thread.sleep(100);
-                if (barrier.await() == 0) {
-                    System.out.println();
-                }
-            } catch (Exception e) {
-                System.out.println(e.getCause().toString());
+        try{
+            barrier.await();
+            releaseOxygen();
+            Thread.sleep(100);
+            if (barrier.await() == 0) {
+                System.out.println();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

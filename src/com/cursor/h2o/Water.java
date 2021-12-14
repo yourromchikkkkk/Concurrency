@@ -1,18 +1,34 @@
 package com.cursor.h2o;
+import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class Water {
-    static final CyclicBarrier BARRIER = new CyclicBarrier(3); // parameter parties = 3 (2 for hydrogens and 1 for oxygen)
+    public static final CyclicBarrier barrier = new CyclicBarrier(3);
+
+    private static void checkForCorrect(String inputStr) throws IllegalArgumentException {
+        for (int i = 0; i < inputStr.length(); i++) {
+            if (inputStr.charAt(i) != 'H' && inputStr.charAt(i) != 'O'){
+                throw new IllegalArgumentException("Line must contain only 'H' or 'O'");
+            }
+        }
+    }
+
+    private static void releaseWater(String inputStr) {
+        for (int i = 0; i < inputStr.length(); i++) {
+            if (inputStr.charAt(i) == 'H') {
+                new Thread(new Hydrogen()).start();
+            } else if (inputStr.charAt(i) == 'O') {
+                new Oxygen().start();
+            }
+        }
+
+    }
+
     public static void main(String[] args) throws InterruptedException {
-        new Thread(new Hydrogen()).start();
-        new Thread(new Hydrogen()).start();
-        new Oxygen().start();
-//        Hydrogen hydrogenThread1 = new Hydrogen();
-//        Hydrogen hydrogenThread2 = new Hydrogen();
-//        Oxygen oxygenThread = new Oxygen();
-//        oxygenThread.start();
-//        hydrogenThread1.start();
-//        hydrogenThread2.start();
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.next();
+        Water.checkForCorrect(input);
+        Water.releaseWater(input);
 
     }
 }

@@ -1,5 +1,5 @@
 *.gitattributes
 *.iml
-/.idea 
+/.idea/ 
 /src/.idea
-/out/production/WaterCompiler/.idea
+/out/
