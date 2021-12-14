@@ -16,9 +16,6 @@ public class Oxygen extends Thread{
             barrier.await();
             releaseOxygen();
             Thread.sleep(100);
-            if (barrier.await() == 0) {
-                System.out.println();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -15,9 +15,6 @@ public class Hydrogen implements Runnable{
             barrier.await();
             releaseHydrogen();
             Thread.sleep(100);
-            if (barrier.await() == 0) {
-                System.out.println();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
