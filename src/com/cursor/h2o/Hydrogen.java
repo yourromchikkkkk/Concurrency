@@ -1,9 +1,15 @@
 package com.cursor.h2o;
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
 
 
 public class Hydrogen implements Runnable{
-    private CyclicBarrier barrier = Water.barrier;
+    private Semaphore hydrogenBarrier;
+    private Semaphore oxygenBarrier;
+
+    public Hydrogen(Semaphore barrier, Semaphore oxygenBarrier) {
+        this.hydrogenBarrier = barrier;
+        this.oxygenBarrier = oxygenBarrier;
+    }
 
     private void releaseHydrogen() {
         System.out.print('H');
@@ -11,14 +17,14 @@ public class Hydrogen implements Runnable{
 
     @Override
     public void run() {
-        try{
-            barrier.await();
-            releaseHydrogen();
-            Thread.sleep(100);
-            if (barrier.await() == 0) {
-                System.out.println();
+        try {
+            hydrogenBarrier.acquire();
+            if (hydrogenBarrier.availablePermits() == 0 && hydrogenBarrier.availablePermits() == 0) {
+                releaseHydrogen();
+                releaseHydrogen();
+                oxygenBarrier.release();
             }
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

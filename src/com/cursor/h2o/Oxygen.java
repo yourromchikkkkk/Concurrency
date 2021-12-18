@@ -1,10 +1,16 @@
 package com.cursor.h2o;
 
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
 
 
 public class Oxygen extends Thread{
-    private CyclicBarrier barrier = Water.barrier;
+    private Semaphore oxygenBarrier;
+    private Semaphore hydrogenBarrier;
+
+    public Oxygen(Semaphore barrier, Semaphore hydrogenBarrier) {
+        this.oxygenBarrier = barrier;
+        this.hydrogenBarrier = hydrogenBarrier;
+    }
 
     private void releaseOxygen() {
         System.out.print('O');
@@ -12,14 +18,13 @@ public class Oxygen extends Thread{
 
     @Override
     public void run() {
-        try{
-            barrier.await();
+        try {
+            oxygenBarrier.acquire();
             releaseOxygen();
-            Thread.sleep(100);
-            if (barrier.await() == 0) {
-                System.out.println();
+            if (hydrogenBarrier.availablePermits() == 0 && oxygenBarrier.availablePermits() == 0) {
+                hydrogenBarrier.release(2);
             }
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

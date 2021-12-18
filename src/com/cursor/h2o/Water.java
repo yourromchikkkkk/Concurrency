@@ -3,8 +3,8 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class Water {
-    public static final CyclicBarrier barrier = new CyclicBarrier(3);
-
+    protected static final Semaphore oxygenBarrier = new Semaphore(1);
+    protected static final Semaphore hydrogenBarrier = new Semaphore(2);
     private static void checkForCorrect(String inputStr) throws IllegalArgumentException {
         for (int i = 0; i < inputStr.length(); i++) {
             if (inputStr.charAt(i) != 'H' && inputStr.charAt(i) != 'O'){
@@ -14,11 +14,12 @@ public class Water {
     }
 
     private static void releaseWater(String inputStr) {
-        for (int i = 0; i < inputStr.length(); i++) {
-            if (inputStr.charAt(i) == 'H') {
-                new Thread(new Hydrogen()).start();
-            } else if (inputStr.charAt(i) == 'O') {
-                new Oxygen().start();
+        String[] characters = inputStr.split("");
+        for (String val : characters) {
+            if (val.equals("O")) {
+                new Oxygen(oxygenBarrier, hydrogenBarrier).start();
+            } else {
+                new Thread(new Hydrogen(hydrogenBarrier, oxygenBarrier)).start();
             }
         }
 
